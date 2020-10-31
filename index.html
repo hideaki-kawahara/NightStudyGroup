@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XBWPR5H0Z3"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-XBWPR5H0Z3');
+    </script>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>20時半からのCompass</title>
+    <meta name="description" content="20時半からのCompassを表示します。" />
+    <meta property="og:url" content="https://nightstudygroup.netlify.app/" />
+    <meta property="og:title" content="20時半からのCompass" />
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="20時半からのCompassを表示します。" />
+    <meta property="og:image" content="https://res.cloudinary.com/profile-card/image/upload/l_text:Sawarabi%20Gothic_40_bold:20%E6%99%82%E5%8D%8A%E3%81%8B%E3%82%89%E3%81%AECompass%0A%E4%BD%9C%E6%88%90%E8%80%85%EF%BC%9A@sapi_kawahara/v1592844332/600x315.png">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@sapi_kawahara" />
+    <meta property="og:site_name" content="20時半からのCompass" />
+    <meta property="og:locale" content="ja_JP" />
+    <link rel="canonical" href="https://nightstudygroup.netlify.app/" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <script>
+      $.ajax({
+        type: 'GET',
+        url: 'https://script.google.com/a/bright-system.jp/macros/s/AKfycbyWZyDTNFioTw-Un0OPO5u-8l6mwi59k-Cg7RJl/exec',
+        dataType: 'jsonp',
+        jsonpCallback: 'myCallback',
+        success: function(json){
+        var len = json.length;
+        var count = 0;
+        for(var i=0; i < len; i++){
+          var started_at = new Date(Date.parse(json[i].started_at));
+          var ended_at = new Date(Date.parse(json[i].ended_at));
+          started_at = started_at.toLocaleString();
+          ended_at = ended_at.toLocaleString();
+          if ((count % 2) == 0) {
+            var card_pattern1 = `<div class="row row-cols-1 row-cols-md-2 g-4">
+  <div class="col">
+    <div class="card bg-light mb-3">
+      <div class="card-body">
+        <h5 class="card-title text-truncate">${json[i].title}</h5>
+        <p class="card-text">開催日時：${started_at}<br>終了日時：${ended_at}</p>
+        <p class="card-text">開催会場：${json[i].place}<br>開催場所：${json[i].address}</p>
+        <a href="${json[i].event_url}" target="_blank" rel="noopener noreferrer" class="card-link btn btn-info btn-lg btn-block">${json[i].event_url}</a>
+      </div>
+    </div>
+  </div>
+`;
+          } else {
+            var card_pattern2 = `<div class="col">
+    <div class="card bg-light mb-3">
+      <div class="card-body">
+        <h5 class="card-title text-truncate">${json[i].title}</h5>
+        <p class="card-text">開催日時：${started_at}<br>終了日時：${ended_at}</p>
+        <p class="card-text">開催会場：${json[i].place}<br>開催場所：${json[i].address}</p>
+        <a href="${json[i].event_url}" target="_blank" rel="noopener noreferrer" class="card-link btn btn-info btn-lg btn-block">${json[i].event_url}</a>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+            $("#compass-data").append(card_pattern1 + card_pattern2);
+          }
+          count++;
+        }
+        if ((count % 2) == 1) {
+          $("#compass-data").append(card_pattern1);
+        } 
+      }
+    });
+    $(document).ajaxStop(function() {
+      $(".spinner-border").remove();
+    });
+    </script>
+    <div class="container">
+      <p class="h1">20時半からのCompass</p>
+      <p class="h6"><a href="https://kawahara-ci.hatenablog.com/entry/2020/10/31/Twenty_thirty_Compass" target="_blank" rel="noopener">これを作成した経緯</a>です。</p>
+      <p class="h6">ご要望は <a href="https://twitter.com/sapi_kawahara" target="_blank" rel="noopener">@sapi_kawahara</a> までお願います。</p>
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border text-primary" style="width: 5rem; height: 5rem;" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+      <span id="compass-data"></span>
+    </div>
+  </body>
+</html>
